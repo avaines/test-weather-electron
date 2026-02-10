@@ -1,0 +1,56 @@
+name: Build and Release macOS
+
+on:
+  release:
+    types: [created]
+  workflow_dispatch: # Allow manual triggering
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build for macOS
+        run: npm run build:mac
+
+      - name: Upload macOS artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-build
+          path: dist/*.dmg
+
+      - name: Find macOS DMG
+        if: github.event_name == 'release'
+        id: find-dmg
+        run: |
+          DMG_PATH=$(find dist -name '*.dmg' -type f | head -n 1)
+          echo "path=$DMG_PATH" >> $GITHUB_OUTPUT
+
+      - name: Upload macOS release asset
+        if: github.event_name == 'release'
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ${{ steps.find-dmg.outputs.path }}
+          asset_name: Degree-Days-Collector-${{ github.event.release.tag_name }}-mac.dmg
+          asset_content_type: application/octet-stream
