@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+  <title>Degree Days Collector</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Met Office Degree Days Collector</h1>
+    <p class="subtitle">ISO50001 Energy Performance Data</p>
+
+    <div class="form-group">
+      <label for="apiKey">Met Office API Key:</label>
+      <input type="password" id="apiKey" placeholder="Enter your API key">
+      <small>Get your API key from <a href="#" onclick="return false;">Met Office Weather DataHub</a></small>
+    </div>
+
+    <div class="form-group">
+      <label for="location">Coordinates (Latitude,Longitude):</label>
+      <input type="text" id="location" placeholder="e.g., 51.5074,-0.1278">
+      <small>Enter coordinates for your location (e.g., London: 51.5074,-0.1278)</small>
+    </div>
+
+    <div class="form-group">
+      <label for="dataDirectory">CSV Storage Location:</label>
+      <div class="directory-picker">
+        <input type="text" id="dataDirectory" placeholder="Default location" readonly>
+        <button id="selectDirBtn" class="btn-secondary">Browse...</button>
+      </div>
+      <small>Choose where to save CSV files (optional, uses default if not set)</small>
+    </div>
+
+    <button id="collectBtn" class="btn-primary">Collect Today's Data</button>
+
+    <div id="status" class="status hidden"></div>
+
+    <div class="info-box">
+      <h3>About Degree Days</h3>
+      <p>Degree days measure the difference between actual daily temperature and a baseline temperature (typically 15.5°C for heating). This metric is used for ISO50001 energy performance monitoring.</p>
+
+      <h3>Data Storage</h3>
+      <p>CSV files are saved to: <code id="dataPath">Loading...</code></p>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+{
+  "name": "degree-days-collector",
+  "version": "1.0.0",
+  "description": "Electron app for collecting Met Office degree days data for ISO50001 compliance",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "collect": "node cli.js",
+    "build": "electron-builder",
+    "build:mac": "electron-builder --mac",
+    "build:win": "electron-builder --win"
+  },
+  "keywords": [
+    "electron",
+    "met-office",
+    "degree-days",
+    "ISO50001",
+    "energy"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  },
+  "build": {
+    "appId": "com.degredays.collector",
+    "productName": "Degree Days Collector",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "cli.js",
+      "src/**/*",
+      "data/**/*",
+      "schedule-windows.bat",
+      "schedule-windows.ps1",
+      "schedule-unix.sh"
+    ],
+    "mac": {
+      "target": "dmg",
+      "category": "public.app-category.utilities"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.ico"
+    }
+  }
+}
